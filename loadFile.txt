@@ -1,0 +1,4 @@
+FILE: logfile
+LEVEL: DEBUG
+MAX-SIZE: 100
+FORMAT: [%tD] [%s] Message:[%s] -->
