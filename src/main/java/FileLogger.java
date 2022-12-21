@@ -19,7 +19,7 @@ public class FileLogger {
             try (FileOutputStream fos = new FileOutputStream(tempFileName, true);
                  BufferedOutputStream bos = new BufferedOutputStream(fos)) {
                 String str = String.format(fileLoggerConfiguration.getFormat(), new Date(),
-                        fileLoggerConfiguration.getLevel(), message);
+                        LoggingLevel.INFO, message);
                 tempFileSize = (int) Files.size(Paths.get(tempFileName));
                 if ((tempFileSize + str.getBytes().length) < fileLoggerConfiguration.getMaxSize()) {
                     bos.write(str.getBytes());
@@ -34,6 +34,8 @@ public class FileLogger {
                 if (tempFileName.equals(fileLoggerConfiguration.getFileName())) {
                     tempFileName = tempFileName + "__" + fileNameCount;
                     fileNameCount++;
+                } else {
+                    fileNameCount = 1;
                 }
                 info(message);
             }
@@ -42,8 +44,29 @@ public class FileLogger {
 
     public void debug(String message) {
         if (fileLoggerConfiguration.getLevel() == LoggingLevel.DEBUG) {
-            info(message);
+            try (FileOutputStream fos = new FileOutputStream(tempFileName, true);
+                 BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+                String str = String.format(fileLoggerConfiguration.getFormat(), new Date(),
+                        LoggingLevel.DEBUG, message);
+                tempFileSize = (int) Files.size(Paths.get(tempFileName));
+                if ((tempFileSize + str.getBytes().length) < fileLoggerConfiguration.getMaxSize()) {
+                    bos.write(str.getBytes());
+                    bos.flush();
+                } else {
+                    throw new FileMaxSizeReachedException(tempFileSize, str.getBytes().length, fileLoggerConfiguration.getMaxSize(), tempFileName);
+                }
+            } catch (IOException e) {
+                System.out.println("Error");
+            } catch (FileMaxSizeReachedException e) {
+                tempFileName = fileLoggerConfiguration.getFileName();
+                if (tempFileName.equals(fileLoggerConfiguration.getFileName())) {
+                    tempFileName = tempFileName + "__" + fileNameCount;
+                    fileNameCount++;
+                } else {
+                    fileNameCount = 1;
+                }
+                debug(message);
+            }
         }
     }
-
 }

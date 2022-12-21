@@ -26,7 +26,7 @@ public class Test {
         logger.info("test18");
         logger.debug("test19");
         logger.info("test20");
-        logger = new FileLogger(new FileLoggerConfigurationLoader("loadFile.txt").load());
+        logger = new FileLogger(new FileLoggerConfigurationLoader("ConfigurationLoadFile.txt").load());
         logger.debug("test21");
         logger.info("test22");
         logger.debug("test23");

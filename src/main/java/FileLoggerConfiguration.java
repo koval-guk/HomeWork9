@@ -1,10 +1,10 @@
 import java.util.Date;
 
 public class FileLoggerConfiguration {
-    private String fileName = "hw9_log_%tF_%tH-%tM";
-    private LoggingLevel level;
-    private int maxSize = 200;
-    private String format = "[%tT] [%s] Message:[%s]\n";
+    private String fileName = "hw9_log_%tF_%tH-%tM"; //sorry, i don't understand how to make this fields final
+    private LoggingLevel level;                     //and i think not static it looks better
+    private int maxSize = 200;                      //both cases increase amount of letters...
+    private String format = "[%tT] [%s] Message:[%s]\n";  //(my english not good. i don't have ukrainian on leptop:))
 
 
     public String getFileName() {
